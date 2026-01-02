@@ -1,0 +1,62 @@
+.App {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #1b1e24;
+
+}
+
+.todocard{
+  transition: all 0.2s !important;
+}
+.todocard:hover{
+  padding-bottom: 10px;
+  padding-top: 10px;
+  box-shadow: 0px 7px 7px rgba(0,0,0,0.4);
+}
+
+.iconBtn:hover{
+  box-shadow: 0px 7px 7px rgba(0,0,0,0.4);
+}
+
+
+
+
+/* font  */
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-Black.ttf");
+  font-weight: 900;
+}
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-Bold.ttf");
+  font-weight: 700;
+}
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-ExtraBold.ttf");
+  font-weight: 800;
+}
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-ExtraLight.ttf");
+  font-weight: 200;
+}
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-Light.ttf");
+  font-weight: 300;
+}
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-Medium.ttf");
+  font-weight: 500;
+}
+@font-face{
+  font-family: Tajawal;
+  src:url("/public/font/Tajawal-Regular.ttf");
+  font-weight: 400;
+}
