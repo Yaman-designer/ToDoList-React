@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 
 import Todo from "./Todo";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import { TodosContext } from "./Contexts/todoContext";
 
 // Create a UUID
@@ -24,12 +24,16 @@ export default function TodoList() {
   const [displeyedTodos, setDispleyedTodos] = useState("all");
 
   // filteration Todos
-  const Completed = Todos.filter((t) => {
-    return t.isCompleted;
-  });
-  const notCompleted = Todos.filter((t) => {
-    return !t.isCompleted;
-  });
+  const Completed = useMemo(() => {
+  return   Todos.filter((t) => {
+      return t.isCompleted;
+    });
+  },[Todos]);
+  const notCompleted = useMemo(() => {
+   return  Todos.filter((t) => {
+      return !t.isCompleted;
+    });
+  },[Todos]);
   let DisplayTodos = Todos;
 
   if (displeyedTodos == "Completed") {
@@ -126,7 +130,6 @@ export default function TodoList() {
                   sx={{
                     height: "100%",
                     width: "100%",
-                  
                   }}
                   disabled={Textfield.length == 0}
                 >
