@@ -21,7 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { useState, useContext, useEffect, useMemo } from "react";
 import { TodosContext } from "./Contexts/todoContext";
-
+import {MySnackbarContext} from "./Contexts/MySnackbarContext";
 // Create a UUID
 import { v4 as uuidv4 } from "uuid";
 
@@ -38,11 +38,12 @@ export default function TodoList() {
     title: "",
     Description:"",
   });
-
+const {handleClick} =useContext(MySnackbarContext);
   // filteration Todos
   const Completed = useMemo(() => {
     return Todos.filter((t) => {
       return t.isCompleted;
+      
     });
   }, [Todos]);
   const notCompleted = useMemo(() => {
@@ -82,6 +83,7 @@ export default function TodoList() {
     setTodos(updateTodos);
     localStorage.setItem("todo", JSON.stringify(updateTodos));
     setTextfield(""); // تفريغ الحقل بعد الإضافة
+    handleClick("تمت إضافة المهمة بنجاح")
   }
 
   // hande Delete Dialog
@@ -99,10 +101,11 @@ export default function TodoList() {
     setTodos(updateTodos);
     localStorage.setItem("todo", JSON.stringify(updateTodos));
     setShowdeletedialog(false);
+    handleClick("تم الحذف بنجاح");
   }
 
 
-  // hande Update Dialog
+  // handle Update Dialog
   const handleUpdateClose = () => {
     setOpenupdateshow(false);
   };
@@ -131,6 +134,7 @@ setupdatetodos({
    
     localStorage.setItem("todo", JSON.stringify(updateTodos));
       setOpenupdateshow(false);
+      handleClick("تم التعديل بنجاح")
   }
 
   // Todos maping

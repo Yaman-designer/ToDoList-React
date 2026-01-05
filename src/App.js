@@ -3,6 +3,8 @@ import TodoList from "./Todolist";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { TodosContext } from "./Contexts/todoContext";
 import { useState } from "react";
+import MySnackbar from "./MySnackbar";
+import { MySnackbarContext } from "./Contexts/MySnackbarContext";
 
 // Create a UUID
 import { v4 as uuidv4 } from "uuid";
@@ -14,8 +16,8 @@ function App() {
     },
     palette: {
       primary: {
-      main: "#512da8",
-    },
+        main: "#512da8",
+      },
     },
   });
 
@@ -39,13 +41,30 @@ function App() {
       isCompleted: false,
     },
   ]);
+  const [open, setOpen] = useState(false);
+  const [message, setmessage] = useState("");
+
+  const handleClick = (message) => {
+    setOpen(true);
+    setmessage(message)
+  };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <ThemeProvider theme={theme}>
-      <div className="App" style={{ direction: "rtl" }}>
-        <TodosContext.Provider value={{ Todos, setTodos }}>
-          <TodoList />
-        </TodosContext.Provider>
-      </div>
+      <MySnackbarContext.Provider value={{ handleClick }}>
+        <div className="App" style={{ direction: "rtl" }}>
+          <TodosContext.Provider value={{ Todos, setTodos }}>
+            <TodoList />
+            <MySnackbar open={open} handleClose={handleClose}  message={message}/>
+          </TodosContext.Provider>
+        </div>
+      </MySnackbarContext.Provider>
     </ThemeProvider>
   );
 }

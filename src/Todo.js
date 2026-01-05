@@ -10,14 +10,13 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-
-import { useState } from "react";
-import { useContext } from "react";
+import {MySnackbarContext} from "./Contexts/MySnackbarContext";
+import { useContext ,useState } from "react";
 import { TodosContext } from "./Contexts/todoContext";
 
 export default function Todo({ todo, opendialog ,opendialogUpdate}) {
   const { Todos, setTodos } = useContext(TodosContext);
-
+const {handleClick} =useContext(MySnackbarContext);
 
   const handleClickOpen = () => {
     opendialog(todo);
@@ -35,6 +34,7 @@ export default function Todo({ todo, opendialog ,opendialogUpdate}) {
     );
     setTodos(updateTodos);
     localStorage.setItem("todo", JSON.stringify(updateTodos));
+    handleClick("تم بنجاح")
   }
 
   
