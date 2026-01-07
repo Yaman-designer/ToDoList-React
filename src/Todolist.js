@@ -237,7 +237,7 @@ setupdatetodos({
             <Divider />
             {/* filter buttons */}
             <ToggleButtonGroup
-              style={{ direction: "ltr", marginTop: "10px" }}
+              style={{ direction: "ltr", marginTop: "10px" , marginBottom:"10px"}}
               color="primary"
               value={displeyedTodos}
               exclusive

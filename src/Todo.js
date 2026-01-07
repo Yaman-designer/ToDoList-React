@@ -56,6 +56,7 @@ const {handleClick} =useContext(MySnackbarContext);
               <Typography
                 variant="h5"
                 style={{
+                  wordBreak:"break-word",
                   textAlign: "right",
                   fontWeight: "600",
                   textDecoration: todo.isCompleted ? "line-through" : "none",
