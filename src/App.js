@@ -1,7 +1,7 @@
 import "./App.css";
 import TodoList from "./Todolist";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { TodosContext } from "./Contexts/todoContext";
+import TodosProvider from "./Contexts/todoContext";
 import { useState } from "react";
 import { ToastProvider } from "./Contexts/MySnackbarContext";
 
@@ -43,13 +43,13 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>
-        <div className="App" style={{ direction: "rtl" }}>
-          <TodosContext.Provider value={{ Todos, setTodos }}>
+      <TodosProvider>
+        <ToastProvider>
+          <div className="App" style={{ direction: "rtl" }}>
             <TodoList />
-          </TodosContext.Provider>
-        </div>
-      </ToastProvider>
+          </div>
+        </ToastProvider>
+      </TodosProvider>
     </ThemeProvider>
   );
 }

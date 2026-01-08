@@ -11,13 +11,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import {MySnackbarContext} from "./Contexts/MySnackbarContext";
-import { useContext ,useState } from "react";
-import { TodosContext } from "./Contexts/todoContext";
+import { useContext } from "react";
+import { useTodos } from "./Contexts/todoContext";
 
 export default function Todo({ todo, opendialog ,opendialogUpdate}) {
-  const { Todos, setTodos } = useContext(TodosContext);
 const {handleClick} =useContext(MySnackbarContext);
-
+const {Todos , dispatch} =useTodos()
   const handleClickOpen = () => {
     opendialog(todo);
   };
@@ -29,11 +28,7 @@ const {handleClick} =useContext(MySnackbarContext);
  
 
   function handlecheckClick() {
-    const updateTodos = Todos.map((t) =>
-      t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
-    );
-    setTodos(updateTodos);
-    localStorage.setItem("todo", JSON.stringify(updateTodos));
+dispatch({type:"completed" , payload:{id :todo.id}})
     handleClick("تم بنجاح")
   }
 

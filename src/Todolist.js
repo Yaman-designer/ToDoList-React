@@ -20,30 +20,33 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import { useState, useContext, useEffect, useMemo } from "react";
-import { TodosContext } from "./Contexts/todoContext";
-import {MySnackbarContext} from "./Contexts/MySnackbarContext";
+import { useTodos } from "./Contexts/todoContext";
+import { MySnackbarContext } from "./Contexts/MySnackbarContext";
 // Create a UUID
 import { v4 as uuidv4 } from "uuid";
 
 export default function TodoList() {
   // useState
+
   const [Textfield, setTextfield] = useState("");
-  const { Todos, setTodos } = useContext(TodosContext);
+  // const { Todos2, setTodos } = useContext(TodosContext);
   const [displeyedTodos, setDispleyedTodos] = useState("all");
   const [Showdeletedialog, setShowdeletedialog] = useState(false);
   const [dialogtodo, setDiyalogtodo] = useState(null);
   const [openupdateshow, setOpenupdateshow] = useState(false);
-  const [opendialogUpdate ,setopendialogUpdate] =useState(null);
-   const [updatetodos, setupdatetodos] = useState({
+  const [opendialogUpdate, setopendialogUpdate] = useState(null);
+  const [updatetodos, setupdatetodos] = useState({
     title: "",
-    Description:"",
+    Description: "",
   });
-const {handleClick} =useContext(MySnackbarContext);
+
+const {Todos , dispatch} =useTodos()
+
+  const { handleClick } = useContext(MySnackbarContext);
   // filteration Todos
   const Completed = useMemo(() => {
     return Todos.filter((t) => {
       return t.isCompleted;
-      
     });
   }, [Todos]);
   const notCompleted = useMemo(() => {
@@ -62,8 +65,7 @@ const {handleClick} =useContext(MySnackbarContext);
   }
 
   useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem("todo")) ?? [];
-    setTodos(storageTodos);
+    dispatch({ type: "get" });
   }, []);
 
   function changeDisplayedTodos(e) {
@@ -72,18 +74,9 @@ const {handleClick} =useContext(MySnackbarContext);
 
   // handelers
   function handleAddClick() {
-    if (Textfield.trim() === "") return;
-    const newTodo = {
-      id: uuidv4(),
-      title: Textfield,
-      Description: "",
-      isCompleted: false,
-    };
-    const updateTodos = [...Todos, newTodo];
-    setTodos(updateTodos);
-    localStorage.setItem("todo", JSON.stringify(updateTodos));
+    dispatch({ type: "added", payload: { titleInput: Textfield } });
     setTextfield(""); // تفريغ الحقل بعد الإضافة
-    handleClick("تمت إضافة المهمة بنجاح")
+    handleClick("تمت إضافة المهمة بنجاح");
   }
 
   // hande Delete Dialog
@@ -95,51 +88,46 @@ const {handleClick} =useContext(MySnackbarContext);
     setDiyalogtodo(todo);
   }
   function handledeleteClick() {
-    const updateTodos = Todos.filter((t) => {
-      return t.id !== dialogtodo.id;
-    });
-    setTodos(updateTodos);
-    localStorage.setItem("todo", JSON.stringify(updateTodos));
+    dispatch({ type: "deleted", payload: dialogtodo });
     setShowdeletedialog(false);
     handleClick("تم الحذف بنجاح");
   }
-
 
   // handle Update Dialog
   const handleUpdateClose = () => {
     setOpenupdateshow(false);
   };
- function openUpdateDialog(todo) {
+  function openUpdateDialog(todo) {
     setOpenupdateshow(true);
-   setopendialogUpdate(todo);
-setupdatetodos({
-  title:todo.title,
-  Description:todo.Description
-})
-
+    setopendialogUpdate(todo);
+    setupdatetodos({
+      title: todo.title,
+      Description: todo.Description,
+    });
   }
   function handleUpdateClickconfirm() {
-    const updateTodos = Todos.map((t) => {
-      if (t.id == opendialogUpdate.id) {
-        return {
-          ...t,
-          title: updatetodos.title,
-          Description: updatetodos.Description,
-        };
-      } else {
-        return t;
-      }
+    dispatch({
+      type: "updated",
+      payload: {
+        id: opendialogUpdate.id,
+        title: updatetodos.title,
+        Description: updatetodos.Description,
+      },
     });
-    setTodos(updateTodos);
-   
-    localStorage.setItem("todo", JSON.stringify(updateTodos));
-      setOpenupdateshow(false);
-      handleClick("تم التعديل بنجاح")
+    setOpenupdateshow(false);
+    handleClick("تم التعديل بنجاح");
   }
 
   // Todos maping
   const todoslist = DisplayTodos.map((t) => {
-    return <Todo key={t.id} todo={t} opendialog={opendialog} opendialogUpdate={openUpdateDialog}/>;
+    return (
+      <Todo
+        key={t.id}
+        todo={t}
+        opendialog={opendialog}
+        opendialogUpdate={openUpdateDialog}
+      />
+    );
   });
   return (
     <>
@@ -237,7 +225,11 @@ setupdatetodos({
             <Divider />
             {/* filter buttons */}
             <ToggleButtonGroup
-              style={{ direction: "ltr", marginTop: "10px" , marginBottom:"10px"}}
+              style={{
+                direction: "ltr",
+                marginTop: "10px",
+                marginBottom: "10px",
+              }}
               color="primary"
               value={displeyedTodos}
               exclusive
