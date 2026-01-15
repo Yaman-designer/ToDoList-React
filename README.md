@@ -49,7 +49,7 @@ This approach ensures maintainability and scalability for larger applications.
 
 yaman
 Front-End Developer
-GitHub: https://github.com/Yaman-designe
+GitHub: https://github.com/Yaman-designer
 
 
 
